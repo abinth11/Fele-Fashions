@@ -9,8 +9,6 @@ const ENV_CONFIG = {
 
   NODE_ENV: process.env.NODE_ENV as string,
 
-  DB_NAME: process.env.DB_NAME as string,
-
   JWT_SECRET: process.env.JWT_SECRET as string,
 
   JWT_REFRESH_SECRET: process.env.JWT_REFRESH_SECRET as string,

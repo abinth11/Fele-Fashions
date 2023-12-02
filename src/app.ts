@@ -7,7 +7,7 @@ import redisConnect from './frameworks/databases/redis/connection';
 import colors from 'colors';
 import errorHandlingMiddleware from './frameworks/webserver/middlewares/error-handler';
 import AppError from './utils/app-error';
-import connectDynamoDB from './frameworks/databases/dynamodb/connection';
+import dynamodbConfig from './frameworks/databases/dynamodb/connection';
 
 colors?.enable();
 
@@ -16,7 +16,7 @@ const server = http.createServer(app);
 
 
 //* dynamo db connection 
-connectDynamoDB()
+dynamodbConfig().connect()
 
 
 //* connection to redis
