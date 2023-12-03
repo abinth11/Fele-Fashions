@@ -1,17 +1,18 @@
-import dynamodbConfig from "./connection"
 import Tables from "../../../constants/table-names"
 import Category from "../../../entities/category"
+import dynamoClient from "./config"
 
 export const categoryRepository = () => {
 
-    const dynamodb = dynamodbConfig()
 
     const addCategory = async (category: Category) => {
+
         const params = {
             TableName: Tables.category,
-            Item: category.toDynamoDBItem(),
+            Item: category,
         };
-        await dynamodb.client.putItem(params)
+        await dynamoClient.put(params).promise()
+
     }
 
     const findCategoryByName = async (categoryName: string) => {
@@ -20,23 +21,31 @@ export const categoryRepository = () => {
             IndexName: "NameIndex",
             KeyConditionExpression: "#name = :name",
             ExpressionAttributeNames: {
-                "#name": "name",
+                "#name": "categoryName",
             },
             ExpressionAttributeValues: {
-                ":name": { S: categoryName }
+                ":name": { S: categoryName },
             },
         };
 
-        const result = await dynamodb.client.query(params);
-        return result
+        const result = await dynamoClient.query(params).promise()
+        return result.Items;
     };
+
 
     const findAll = async (limit: number, skip: number) => {
         let params = {
             TableName: Tables.category,
+            Limit: limit,
+            // ExclusiveStartKey:{
+            //     categoryId:skip
+            // }
         };
-        const result = await dynamodb.client.scan(params)
-        return result
+        const result = await dynamoClient.scan(params).promise()
+        return {
+            totalCategories: result.Count,
+            categories: result.Items
+        }
     }
 
     const findProductsByCategory = async () => {

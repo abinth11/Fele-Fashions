@@ -7,17 +7,13 @@ import redisConnect from './frameworks/databases/redis/connection';
 import colors from 'colors';
 import errorHandlingMiddleware from './frameworks/webserver/middlewares/error-handler';
 import AppError from './utils/app-error';
-import dynamodbConfig from './frameworks/databases/dynamodb/connection';
+import swaggerDocs from './adapters/docs/config';
+import ENV_CONFIG from './config';
 
 colors?.enable();
 
 const app: Application = express();
 const server = http.createServer(app);
-
-
-//* dynamo db connection 
-dynamodbConfig().connect()
-
 
 //* connection to redis
 const redisClient = redisConnect().createRedisClient();
@@ -27,6 +23,10 @@ expressConfig(app);
 
 //* routes for each endpoint
 routes(app, redisClient);
+
+//* swagger docs
+swaggerDocs(app,ENV_CONFIG.PORT);
+
 
 //* handles server side errors
 app.use(errorHandlingMiddleware);

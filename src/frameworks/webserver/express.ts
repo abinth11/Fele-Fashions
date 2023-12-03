@@ -1,13 +1,12 @@
 import express, { Application } from 'express';
 import morgan from 'morgan';
 import cors from 'cors';
-import configKeys from '../../config';
 import helmet from 'helmet';
 import rateLimit from 'express-rate-limit';
 
 const limiter = rateLimit({
   windowMs: 15 * 60 * 1000,
-  max: 200, 
+  max: 200,
   message: 'Too many requests from this IP, please try again later.',
   keyGenerator: (req) => {
     const xRealIp = req.headers['x-real-ip'];
@@ -17,7 +16,7 @@ const limiter = rateLimit({
 
 const expressConfig = (app: Application) => {
   // Development logging
-  if (configKeys.NODE_ENV === 'development') {
+  if (process.env.NODE_ENV === 'development') {
     app.use(morgan('dev'));
   }
   app.set('trust proxy', true); // Enable trust for X-Forwarded-* headers

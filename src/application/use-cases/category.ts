@@ -7,16 +7,17 @@ import CategoryRepositoryInterface from "../repositories/category-repo-interface
 export const addCategoryUseCase = async (category: ICategory, repository: ReturnType<CategoryRepositoryInterface>) => {
 
     const alreadyExists = await repository.findCategoryByName(category.categoryName)
-    if (alreadyExists) {
+    
+    if (alreadyExists?.length) {
         throw new AppError("Category with same name already exists", HttpStatusCodes.CONFLICT)
     }
     const newCategory = new Category(category)
     await repository.addCategory(newCategory)
 }
 
-export const findAllCategoriesUseCase = async (limit: number, offset: number, repository: ReturnType<CategoryRepositoryInterface>) => {
+export const findAllCategoriesUseCase = async (limit: number, skip: number, repository: ReturnType<CategoryRepositoryInterface>) => {
 
-    const categories = await repository.findAll(limit, offset)
+    const categories = await repository.findAll(limit, skip)
     return categories
 
 }

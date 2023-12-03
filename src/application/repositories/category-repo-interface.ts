@@ -6,7 +6,7 @@ export const categoryRepositoryInterface = (repository: ReturnType<CategoryRepos
 
     const findCategoryByName = (categoryName: string) => repository.findCategoryByName(categoryName)
 
-    const findAll = (limit: number, offset: number) => repository.findAll(limit, offset)
+    const findAll = (limit: number, skip: number) => repository.findAll(limit, skip)
 
     const findProductsByCategory = () => repository.findProductsByCategory()
 

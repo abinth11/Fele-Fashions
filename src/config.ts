@@ -13,7 +13,17 @@ const ENV_CONFIG = {
 
   JWT_REFRESH_SECRET: process.env.JWT_REFRESH_SECRET as string,
 
-  REDIS_URL: process.env.REDIS_URL as string
+  REDIS_URL: process.env.REDIS_URL as string,
+
+  API_KEY: process.env.API_KEY as string,
+
+  AWS_DEFAULT_REGION: process.env.AWS_DEFAULT_REGION,
+
+  AWS_ACCESS_KEY_ID: process.env.AWS_ACCESS_KEY_ID,
+
+  AWS_SECRET_ACCESS_KEY:process.env.AWS_SECRET_ACCESS_KEY,
+
+  AWS_END_POINT:process.env.AWS_END_POINT
 
 };
 
