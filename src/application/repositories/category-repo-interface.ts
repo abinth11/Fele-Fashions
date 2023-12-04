@@ -8,13 +8,10 @@ export const categoryRepositoryInterface = (repository: ReturnType<CategoryRepos
 
     const findAll = (limit: number, skip: number) => repository.findAll(limit, skip)
 
-    const findProductsByCategory = () => repository.findProductsByCategory()
-
     return {
         addCategory,
         findCategoryByName,
-        findAll,
-        findProductsByCategory
+        findAll
     }
 }
 
