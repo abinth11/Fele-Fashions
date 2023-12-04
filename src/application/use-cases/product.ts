@@ -3,6 +3,7 @@ import HttpStatusCodes from "../../constants/http-status-codes";
 import Product from "../../entities/product";
 import { IProduct } from "../../types/product";
 import AppError from "../../utils/app-error";
+import { validateLimitAndSkip } from "../../utils/helper-function";
 import CacheRepositoryInterface from "../repositories/cache-repo-interface";
 import CategoryRepositoryInterface from "../repositories/category-repo-interface";
 import ProductRepositoryInterface from "../repositories/product-repo-interface";
@@ -22,12 +23,14 @@ export const addProductUseCase = async (
 ): Promise<void> => {
     const newProduct = new Product(product)
     await repository.addProduct(newProduct)
-    await cacheRepository.clearCache(CacheKeys.PRODUCTS_BY_CATEGORY)
+    await cacheRepository.clearAllPreviousCache(CacheKeys.PRODUCTS_BY_CATEGORY)
 }
 
 /**
  * Find products by category
  * @param categoryId - The category ID to search for products.
+ * @param limit - The maximum number of categories to retrieve.
+ * @param skip - The number of categories to skip.
  * @param categoryRepository - The repository for interacting with the category table.
  * @param productRepository - The repository for interacting with the product table.
  * @param cacheRepository - The repository for the cache db
@@ -36,6 +39,8 @@ export const addProductUseCase = async (
  */
 export const findProductsByCategoryUseCase = async (
     categoryId: string,
+    limit: number,
+    skip: number,
     categoryRepository: ReturnType<CategoryRepositoryInterface>,
     productRepository: ReturnType<ProductRepositoryInterface>,
     cacheRepository: ReturnType<CacheRepositoryInterface>
@@ -43,13 +48,16 @@ export const findProductsByCategoryUseCase = async (
     if (!categoryId) {
         throw new AppError("Please provide a valid category id", HttpStatusCodes.BAD_REQUEST)
     }
+    if (!validateLimitAndSkip(limit, skip)) {
+        throw new AppError("Please provide a valid limit and skip values", HttpStatusCodes.BAD_REQUEST)
+    }
     const categoryExists = await categoryRepository.findCategoryById(categoryId)
     if (!categoryExists?.length) {
         throw new AppError("Category not found, please provide a valid category id", HttpStatusCodes.BAD_REQUEST)
     }
-    const result = await productRepository.findProductsByCategory(categoryId)
+    const result = await productRepository.findProductsByCategory(categoryId,limit,skip)
     const cacheOptions = {
-        key: CacheKeys.PRODUCTS_BY_CATEGORY,
+        key: `${CacheKeys.ALL_CATEGORIES}:${limit}:${skip}`,
         data: JSON.stringify(result),
         expireTimeSec: 86400
     }

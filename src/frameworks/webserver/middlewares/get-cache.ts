@@ -7,7 +7,7 @@ export function getCacheMiddleware(key: string, redisClient: RedisClient) {
         res: Response,
         next: NextFunction
     ) {
-        const data = await redisClient.get(key);
+        const data = await redisClient.get(`${key}:${req.query.limit}:${req.query.skip}`);
         if (!data) {
             return next();
         } else {

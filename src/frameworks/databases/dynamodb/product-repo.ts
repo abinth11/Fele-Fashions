@@ -1,6 +1,7 @@
 import Tables from "../../../constants/table-names";
 import Product from "../../../entities/product";
 import dynamoClient from "./config";
+const attr = require('dynamodb-data-types').AttributeValue;
 
 
 export const productRepository = () => {
@@ -13,10 +14,11 @@ export const productRepository = () => {
         await dynamoClient.putItem(params)
     }
 
-    const findProductsByCategory = async (categoryId: string) => {
+    const findProductsByCategory = async (categoryId: string,limit:number,skip:number) => {
         const productParams = {
             TableName: Tables.product,
             IndexName: 'CategoryIdIndex',
+            Limit: limit,
             KeyConditionExpression: 'categoryId = :categoryId',
             ExpressionAttributeValues: {
                 ':categoryId': { S: categoryId },
@@ -39,13 +41,13 @@ export const productRepository = () => {
             dynamoClient.query(categoryParams),
         ]);
 
-        const products = productResult.Items;
+        const products = productResult.Items && productResult.Items.map((item) => attr.unwrap(item))
         const totalProducts = productResult.Count
-        const category = categoryResult.Items;
+        const category = categoryResult.Items && attr.unwrap(categoryResult?.Items[0])
 
         return {
-            categoryId: category && category[0]?.categoryId,
-            categoryName: category && category[0]?.categoryName,
+            categoryId: category?.categoryId,
+            categoryName: category?.categoryName,
             totalProducts: totalProducts,
             products: products
         }

@@ -68,10 +68,24 @@ paths:
       - name: categoryId
         in: query
         description: id of the category 
-        required: false
+        required: true
         schema:
           type: string
           default: 8977475d-f549-412e-95b7-383e069bf310
+      - name: limit
+        in: query
+        description: Number of items to return 
+        required: true
+        schema:
+          type: integer
+          default: 10
+      - name: skip
+        in: query
+        description: Number of items to skip
+        required: true
+        schema:
+          type: integer
+          default: 0
       responses:
         200:
           description: Successfully retrieved products based on the category

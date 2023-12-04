@@ -19,12 +19,20 @@ export function cacheRepository(redisClient: RedisClient) {
     return result === 1;
   };
 
+  const clearAllPreviousCache = async (key:string)=>{
+    const cacheKeys = await redisClient.keys(`${key}:*`);
+    if (cacheKeys.length > 0) {
+      await redisClient.del(cacheKeys);
+    }
+  }
+
 
 
   return {
     setCache,
     getCache,
     clearCache,
+    clearAllPreviousCache
   };
 }
 

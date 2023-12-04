@@ -69,14 +69,14 @@ paths:
       - name: limit
         in: query
         description: Number of items to return 
-        required: false
+        required: true
         schema:
           type: integer
           default: 10
       - name: skip
         in: query
         description: Number of items to skip
-        required: false
+        required: true
         schema:
           type: integer
           default: 0

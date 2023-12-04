@@ -1,7 +1,7 @@
 import expressAsyncHandler from "express-async-handler";
 import ProductRepositoryInterface from "../../application/repositories/product-repo-interface";
 import ProductRepository from "../../frameworks/databases/dynamodb/product-repo";
-import { Request, Response } from 'express'
+import { Request, Response, query } from 'express'
 import { IProduct } from "../../types/product";
 import { addProductUseCase, findProductsByCategoryUseCase } from "../../application/use-cases/product";
 import HttpStatusCodes from "../../constants/http-status-codes";
@@ -27,8 +27,8 @@ const productController = (
     productRepoImpl: ProductRepository,
     categoryRepositoryInterface: CategoryRepositoryInterface,
     categoryRepoImpl: CategoryRepository,
-    cacheRepositoryInterface:CacheRepositoryInterface,
-    cacheRepositoryImpl:CacheRepository,
+    cacheRepositoryInterface: CacheRepositoryInterface,
+    cacheRepositoryImpl: CacheRepository,
     redisClient: RedisClient
 ) => {
 
@@ -38,7 +38,7 @@ const productController = (
 
     const addProduct = expressAsyncHandler(async (req: Request, res: Response) => {
         const product: IProduct = req.body
-        await addProductUseCase(product, dbRepositoryProduct,dbRepositoryCache)
+        await addProductUseCase(product, dbRepositoryProduct, dbRepositoryCache)
         res.status(HttpStatusCodes.CREATED).json({
             status: 'success',
             message: 'Successfully added new product',
@@ -47,8 +47,15 @@ const productController = (
     })
 
     const findProductsByCategory = expressAsyncHandler(async (req: Request, res: Response) => {
-        const categoryId = req.query.categoryId as string
-        const response = await findProductsByCategoryUseCase(categoryId,dbRepositoryCategory,dbRepositoryProduct,dbRepositoryCache)
+        const query = req.query
+        const response = await findProductsByCategoryUseCase(
+            query?.categoryId as string,
+            Number(query?.limit),
+            Number(query?.skip),
+            dbRepositoryCategory,
+            dbRepositoryProduct,
+            dbRepositoryCache
+        )
         res.status(HttpStatusCodes.CREATED).json({
             status: 'success',
             message: 'Successfully retrieved products by category',
