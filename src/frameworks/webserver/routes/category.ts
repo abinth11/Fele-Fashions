@@ -4,13 +4,25 @@ import { categoryRepositoryInterface } from "../../../application/repositories/c
 import { categoryRepository } from "../../databases/dynamodb/category-repo";
 import validator from "../middlewares/validators";
 import { catchValidationErrors } from "../middlewares/catch-validation-errors";
+import { RedisClient } from "../../../app";
+import { cacheRepositoryInterface } from "../../../application/repositories/cache-repo-interface";
+import { cacheRepository } from "../../databases/redis/cache-repository";
+import { getCacheMiddleware } from "../middlewares/get-cache";
+import CacheKeys from "../../../constants/cache-keys";
 
 /**
  * Category Router
+ * @param {object} redisClient - The Redis client instance.
  * @returns An Express router containing routes for category-related endpoints.
  */
-const categoryRouter = () => {
-    const controller = categoryController(categoryRepositoryInterface, categoryRepository);
+const categoryRouter = (redisClient: RedisClient) => {
+    const controller = categoryController(
+        categoryRepositoryInterface,
+        categoryRepository,
+        cacheRepositoryInterface,
+        cacheRepository,
+        redisClient
+    );
     const router = express.Router();
 
     /**
@@ -27,7 +39,7 @@ const categoryRouter = () => {
      * @route GET /
      * @returns {object} JSON response containing a list of all categories.
      */
-    router.get('/', controller.findAllCategories);
+    router.get('/', getCacheMiddleware(CacheKeys.ALL_CATEGORIES, redisClient), controller.findAllCategories);
 
     return router;
 };

@@ -12,8 +12,8 @@ import productRouter from './product';
  */
 const routes = (app: Application, redisClient: RedisClient): void => {
 
-    app.use('/api/v1/categories', verifyApiKey, categoryRouter())
-    app.use('/api/v1/products', verifyApiKey, productRouter())
+    app.use('/api/v1/categories', verifyApiKey, categoryRouter(redisClient))
+    app.use('/api/v1/products', verifyApiKey, productRouter(redisClient))
 
 };
 

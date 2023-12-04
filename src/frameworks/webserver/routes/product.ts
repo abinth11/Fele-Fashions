@@ -6,17 +6,26 @@ import validator from "../middlewares/validators";
 import { catchValidationErrors } from "../middlewares/catch-validation-errors";
 import { categoryRepositoryInterface } from "../../../application/repositories/category-repo-interface";
 import { categoryRepository } from "../../databases/dynamodb/category-repo";
+import { RedisClient } from "../../../app";
+import { cacheRepositoryInterface } from "../../../application/repositories/cache-repo-interface";
+import { cacheRepository } from "../../databases/redis/cache-repository";
+import { getCacheMiddleware } from "../middlewares/get-cache";
+import CacheKeys from "../../../constants/cache-keys";
 
 /**
  * Product Router
+ * @param {object} redisClient - The Redis client instance.
  * @returns An Express router containing routes for product-related endpoints.
  */
-const productRouter = () => {
+const productRouter = (redisClient: RedisClient) => {
     const controller = productController(
         productRepoInterface,
         productRepository,
         categoryRepositoryInterface,
-        categoryRepository
+        categoryRepository,
+        cacheRepositoryInterface,
+        cacheRepository,
+        redisClient
     );
 
     const router = express.Router();
@@ -36,7 +45,7 @@ const productRouter = () => {
      * @param {string} req.query.categoryId - The category ID to filter products.
      * @returns {object} JSON response containing a list of products in the specified category.
      */
-    router.get('/list', controller.findProductsByCategory);
+    router.get('/list', getCacheMiddleware(CacheKeys.PRODUCTS_BY_CATEGORY, redisClient), controller.findProductsByCategory);
 
     return router;
 };
