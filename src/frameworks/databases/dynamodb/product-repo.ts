@@ -1,3 +1,4 @@
+import DbIndexNames from "../../../constants/db-index-names";
 import Tables from "../../../constants/table-names";
 import Product from "../../../entities/product";
 import dynamoClient from "./config";
@@ -17,7 +18,7 @@ export const productRepository = () => {
     const findProductsByCategory = async (categoryId: string,limit:number,skip:number) => {
         const productParams = {
             TableName: Tables.product,
-            IndexName: 'CategoryIdIndex',
+            IndexName: DbIndexNames.CategoryIdIndex,
             Limit: limit,
             KeyConditionExpression: 'categoryId = :categoryId',
             ExpressionAttributeValues: {
@@ -26,7 +27,7 @@ export const productRepository = () => {
         };
         const categoryParams = {
             TableName: Tables.category,
-            IndexName: 'CategoryIdIndex',
+            IndexName: DbIndexNames.CategoryIdIndex,
             KeyConditionExpression: '#attr = :value',
             ExpressionAttributeNames: {
                 '#attr': 'categoryId',
