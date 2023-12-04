@@ -1,6 +1,7 @@
 import Tables from "../../../constants/table-names"
 import Category from "../../../entities/category"
 import dynamoClient from "./config"
+const attr = require('dynamodb-data-types').AttributeValue;
 
 export const categoryRepository = () => {
 
@@ -45,7 +46,7 @@ export const categoryRepository = () => {
         const result = await dynamoClient.scan(params)
         return {
             totalCategories: result.Count,
-            categories: result.Items
+            categories: result.Items?.map((item)=>attr.unwrap(item))
         }
     }
 

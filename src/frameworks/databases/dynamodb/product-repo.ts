@@ -1,6 +1,7 @@
 import Tables from "../../../constants/table-names";
 import Product from "../../../entities/product";
 import dynamoClient from "./config";
+const attr = require('dynamodb-data-types').AttributeValue;
 
 
 export const productRepository = () => {
@@ -39,13 +40,13 @@ export const productRepository = () => {
             dynamoClient.query(categoryParams),
         ]);
 
-        const products = productResult.Items;
+        const products = productResult.Items && productResult.Items.map((item) => attr.unwrap(item))
         const totalProducts = productResult.Count
-        const category = categoryResult.Items;
+        const category = categoryResult.Items && attr.unwrap(categoryResult?.Items[0])
 
         return {
-            categoryId: category && category[0]?.categoryId,
-            categoryName: category && category[0]?.categoryName,
+            categoryId: category?.categoryId,
+            categoryName: category?.categoryName,
             totalProducts: totalProducts,
             products: products
         }
