@@ -49,10 +49,29 @@ export const categoryRepository = () => {
         }
     }
 
+    const findCategoryById = async (categoryId: string) => {
+
+        const categoryParams = {
+            TableName: Tables.category,
+            IndexName: 'CategoryIdIndex',
+            KeyConditionExpression: '#attr = :value',
+            ExpressionAttributeNames: {
+                '#attr': 'categoryId',
+            },
+            ExpressionAttributeValues: {
+                ':value': { S: categoryId },
+            },
+        };
+
+        const result = await dynamoClient.query(categoryParams)
+        return result.Items
+    }
+
     return {
         addCategory,
         findCategoryByName,
-        findAll
+        findAll,
+        findCategoryById
     }
 }
 
