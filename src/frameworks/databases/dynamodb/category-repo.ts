@@ -1,6 +1,7 @@
 import Tables from "../../../constants/table-names"
 import Category from "../../../entities/category"
 import dynamoClient from "./config"
+import DbIndexNames from "../../../constants/db-index-names";
 const attr = require('dynamodb-data-types').AttributeValue;
 
 export const categoryRepository = () => {
@@ -19,7 +20,7 @@ export const categoryRepository = () => {
     const findCategoryByName = async (categoryName: string) => {
         const params = {
             TableName: Tables.category,
-            IndexName: 'NameIndex',
+            IndexName: DbIndexNames.NameIndex,
             KeyConditionExpression: '#attr = :value',
             ExpressionAttributeNames: {
                 '#attr': 'categoryName',
@@ -54,7 +55,7 @@ export const categoryRepository = () => {
 
         const categoryParams = {
             TableName: Tables.category,
-            IndexName: 'CategoryIdIndex',
+            IndexName: DbIndexNames.CategoryIdIndex,
             KeyConditionExpression: '#attr = :value',
             ExpressionAttributeNames: {
                 '#attr': 'categoryId',

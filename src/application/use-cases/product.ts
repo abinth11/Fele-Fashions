@@ -53,7 +53,7 @@ export const findProductsByCategoryUseCase = async (
     }
     const categoryExists = await categoryRepository.findCategoryById(categoryId)
     if (!categoryExists?.length) {
-        throw new AppError("Category not found, please provide a valid category id", HttpStatusCodes.BAD_REQUEST)
+        throw new AppError("Category not found, please provide a valid category id, limit must be less than 100", HttpStatusCodes.BAD_REQUEST)
     }
     const result = await productRepository.findProductsByCategory(categoryId,limit,skip)
     const cacheOptions = {

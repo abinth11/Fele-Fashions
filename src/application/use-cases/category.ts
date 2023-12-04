@@ -47,7 +47,7 @@ export const findAllCategoriesUseCase = async (
     cacheRepository: ReturnType<CacheRepositoryInterface>
 ): Promise<any> => {
     if (!validateLimitAndSkip(limit, skip)) {
-        throw new AppError("Please provide a valid limit and skip values", HttpStatusCodes.BAD_REQUEST)
+        throw new AppError("Please provide a valid limit and skip values, limit must be less than 100", HttpStatusCodes.BAD_REQUEST)
     }
     const categories = await repository.findAll(limit, skip)
     const cacheOptions = {
