@@ -13,7 +13,7 @@ const ENV_CONFIG = {
 
   JWT_REFRESH_SECRET: process.env.JWT_REFRESH_SECRET as string,
 
-  REDIS_URL: process.env.REDIS_URL as string,
+  REDIS_URL: process.env.REDIS_URL as string, 
 
   API_KEY: process.env.API_KEY as string,
 

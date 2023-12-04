@@ -1,20 +1,18 @@
 import { ICategory } from "../types/category";
 import { generateRandomId } from "../utils/helper-function";
+const attr = require('dynamodb-data-types').AttributeValue;
 
 class Category {
     categoryId: string;
     categoryName: string;
 
-    constructor({categoryName }: ICategory) {
+    constructor({ categoryName }: ICategory) {
         this.categoryId = generateRandomId();
         this.categoryName = categoryName;
     }
 
-    toDynamoDBItem(){
-        return {
-            'categoryId': { 'S':this.categoryId.toString() },
-            'categoryName': { 'S': this.categoryName },
-        };
+    marshal() {
+        return attr.wrap({ categoryId: this.categoryId, categoryName: this.categoryName })
     }
 }
 

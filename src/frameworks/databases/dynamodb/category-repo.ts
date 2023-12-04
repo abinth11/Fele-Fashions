@@ -9,28 +9,29 @@ export const categoryRepository = () => {
 
         const params = {
             TableName: Tables.category,
-            Item: category,
+            Item: category.marshal(),
         };
-        await dynamoClient.put(params).promise()
+        await dynamoClient.putItem(params)
 
     }
 
     const findCategoryByName = async (categoryName: string) => {
         const params = {
             TableName: Tables.category,
-            IndexName: "NameIndex",
-            KeyConditionExpression: "#name = :name",
+            IndexName: 'NameIndex',
+            KeyConditionExpression: '#attr = :value',
             ExpressionAttributeNames: {
-                "#name": "categoryName",
+                '#attr': 'categoryName',
             },
             ExpressionAttributeValues: {
-                ":name": { S: categoryName },
+                ':value': { S: categoryName },
             },
         };
 
-        const result = await dynamoClient.query(params).promise()
-        return result.Items;
+        const result = await dynamoClient.query(params)
+        return result.Items
     };
+
 
 
     const findAll = async (limit: number, skip: number) => {
@@ -41,22 +42,36 @@ export const categoryRepository = () => {
             //     categoryId:skip
             // }
         };
-        const result = await dynamoClient.scan(params).promise()
+        const result = await dynamoClient.scan(params)
         return {
             totalCategories: result.Count,
             categories: result.Items
         }
     }
 
-    const findProductsByCategory = async () => {
+    const findCategoryById = async (categoryId: string) => {
 
+        const categoryParams = {
+            TableName: Tables.category,
+            IndexName: 'CategoryIdIndex',
+            KeyConditionExpression: '#attr = :value',
+            ExpressionAttributeNames: {
+                '#attr': 'categoryId',
+            },
+            ExpressionAttributeValues: {
+                ':value': { S: categoryId },
+            },
+        };
+
+        const result = await dynamoClient.query(categoryParams)
+        return result.Items
     }
 
     return {
         addCategory,
         findCategoryByName,
         findAll,
-        findProductsByCategory
+        findCategoryById
     }
 }
 

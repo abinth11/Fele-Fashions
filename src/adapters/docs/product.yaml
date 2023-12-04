@@ -1,15 +1,15 @@
 swagger: "3.0.0"
 basePath: /api/v1
 tags:
-  - name: Category
-    description: The Category API
+  - name: Product
+    description: The Product API
 paths:
-  /api/v1/categories/save:
+  /api/v1/products/save:
     post:
-      summary: Add category
-      description: Add a new category.
+      summary: Add product
+      description: Add a new product.
       tags:
-        - Category
+        - Product
       security:
         - apiKey: []
       requestBody:
@@ -17,10 +17,10 @@ paths:
         content:
           application/json:
             schema:
-              $ref: "#/components/schemas/Category"
+              $ref: "#/components/schemas/Product"
       responses:
         201:
-          description: Successfully added a new category
+          description: Successfully added a new product
           content:
             application/json:
               schema:
@@ -31,7 +31,7 @@ paths:
                     example: "success"
                   message:
                     type: string
-                    example: "Successfully added a new category"
+                    example: "Successfully added a new product"
         400:
           description: Bad request, Invalid user input
           content:
@@ -45,7 +45,7 @@ paths:
               schema:
                 $ref: "#/components/schemas/ErrorResponse"
         409:
-          description: Conflict, A category exists with the same name
+          description: Conflict, A product exists with the same name
           content:
             application/json:
               schema:
@@ -56,54 +56,57 @@ paths:
             application/json:
               schema:
                 $ref: "#/components/schemas/ErrorResponse"
-
-  /api/v1/categories:
+/api/v1/products/list:
     get:
-      summary: fetch categories
-      description: To fetch all available categories.
+      summary: Get products
+      description: Get products based on a particular category
       tags:
-        - Category
+        - Product
       security:
         - apiKey: []
       parameters:
-      - name: limit
+      - name: categoryId
         in: query
-        description: Number of items to return 
+        description: id of the category 
         required: false
         schema:
-          type: integer
-          default: 10
-      - name: skip
-        in: query
-        description: Number of items to skip
-        required: false
-        schema:
-          type: integer
-          default: 0
+          type: string
+          default: 8977475d-f549-412e-95b7-383e069bf310
       responses:
         200:
-          description: Successfully fetched all categories
+          description: Successfully retrieved products based on the category
           content:
             application/json:
               schema:
-              type: object
-              properties:
-                status:
-                  type: string
-                  example: "success"
-                message:
-                  type: string
-                  example: "Successfully fetched all categories"
-                data:
                 type: object
                 properties:
-                 totalCategories:
-                   type: number,
-                   example: 10
-                 categories:
+                  status:
+                    type: string
+                    example: "success"
+                  message:
+                    type: string
+                    example: "Successfully retrieved products by category"
+                  data:
+                    type: object
+                    properties:
+                     categoryId:
+                      type: string
+                      example: 8977475d-f549-412e-95b7-383e069bf310
+                     categoryName:
+                      example: Footwear
+                     totalProducts:
+                      type: number,
+                      example: 10
+                     products:
                       type: array    
                       items:        
-                        $ref: "#/components/schemas/Category"
+                        $ref: "#/components/schemas/Product"
+        400:
+          description: Bad request, Invalid user input
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
         401:
           description: Unauthorized, Invalid credentials
           content:
@@ -115,30 +118,43 @@ paths:
           content:
             application/json:
               schema:
-                $ref: "#/components/schemas/ErrorResponse"  
+                $ref: "#/components/schemas/ErrorResponse"
 
 components:
   schemas:
-    Category:
+    Product:
       type: object
       required:
-        - categoryName
+        - productName
+        - price
+        - productImage
+        - brand
+        - categoryId
       properties:
-        categoryId:
+        productId:
           type: string 
           description: The auto-generated id of every category
           readOnly: true
-        categoryName:
+        productName:
           type: string
-          description: Name of the category
-          example: "Footwear"
-          default: "DefaultCategory"
-        createdAt:
+          description: Name of the product
+          example: "Jack and Jones Leather boots"
+        price:
+          type: number
+          description: price for the product
+          example: 4000
+        productImage:
           type: string
-          format: date-time
-          description: Time of creation
-          readOnly: true 
-
+          description: Image url of the product
+          example: https://m.media-amazon.com/images/I/71ZLToAJrYL._AC_UY1000_.jpg
+        brand:
+          type: string
+          description: Product brand name
+          example: Jack and Jones
+        categoryId:
+          type: string
+          description: Id of the category where the product belongs to 
+          example: 8977475d-f549-412e-95b7-383e069bf310
     ErrorResponse:
       type: object
       required:

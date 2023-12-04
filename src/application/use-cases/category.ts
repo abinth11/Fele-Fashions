@@ -7,7 +7,6 @@ import CategoryRepositoryInterface from "../repositories/category-repo-interface
 export const addCategoryUseCase = async (category: ICategory, repository: ReturnType<CategoryRepositoryInterface>) => {
 
     const alreadyExists = await repository.findCategoryByName(category.categoryName)
-    
     if (alreadyExists?.length) {
         throw new AppError("Category with same name already exists", HttpStatusCodes.CONFLICT)
     }
