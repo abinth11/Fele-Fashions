@@ -5,6 +5,13 @@ import { Request, Response } from "express"
 import { ICategory } from "../../types/category"
 import { addCategoryUseCase, findAllCategoriesUseCase } from "../../application/use-cases/category"
 import HttpStatusCodes from "../../constants/http-status-codes"
+
+/**
+ * Category Controller
+ * @param categoryRepoInterface - The interface for the category repository.
+ * @param categoryRepoImpl - The implementation of the category repository.
+ * @returns An object containing functions for handling category-related HTTP requests.
+ */
 const categoryController = (categoryRepoInterface: CategoryRepositoryInterface, categoryRepoImpl: CategoryRepository) => {
 
     const dbRepositoryCategory = categoryRepoInterface(categoryRepoImpl())

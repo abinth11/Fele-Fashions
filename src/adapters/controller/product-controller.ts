@@ -8,6 +8,14 @@ import HttpStatusCodes from "../../constants/http-status-codes";
 import CategoryRepositoryInterface from "../../application/repositories/category-repo-interface";
 import CategoryRepository from "../../frameworks/databases/dynamodb/category-repo";
 
+/**
+ * Product Controller
+ * @param productRepositoryInterface - The interface for the product repository.
+ * @param productRepoImpl - The implementation of the product repository.
+ * @param categoryRepositoryInterface - The interface for the category repository.
+ * @param categoryRepoImpl - The implementation of the category repository.
+ * @returns An object containing functions for handling product-related HTTP requests.
+ */
 const productController = (
     productRepositoryInterface: ProductRepositoryInterface,
     productRepoImpl: ProductRepository,

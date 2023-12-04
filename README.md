@@ -8,15 +8,14 @@ Server side logic for fele fashions
 3. [Usage](#usage)
    - [Development](#usage-for-development)
    - [Production](#usage-for-production)
-4. [How to Use PDF Slice Master](#how-to-use-pdf-slice-master)
+4. [How to Use Fele-Fashions](#how-to-use-fele-fashions)
 4. [Key Features](#key-features)
 5. [Error Handling](#error-handling)
-6. [APIs](#apis)
-7. [Detailed API Documentation](#detailed-api-documentation)
-8. [Database Schema](#database-schema)
-9. [Architecture and Technologies](#architecture-and-technologies)
-10. [Tools and Stack](#tools-and-stack)
-11. [Contact](#contact)
+8. [Detailed API Documentation](#detailed-api-documentation)
+9. [Database Schema](#database-schema)
+10. [Architecture and Technologies](#architecture-and-technologies)
+11. [Tools and Stack](#tools-and-stack)
+12. [Contact](#contact)
 
 
 ## Installation
