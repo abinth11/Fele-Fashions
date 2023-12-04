@@ -16,11 +16,13 @@ export const cacheRepositoryInterface = (repository: ReturnType<CacheRepository>
 
     const clearCache = (key: string) => repository.clearCache(key)
 
+    const clearAllPreviousCache = (key:string) => repository.clearAllPreviousCache(key)
 
     return {
         setCache,
         getCache,
-        clearCache
+        clearCache,
+        clearAllPreviousCache
     }
 
 }

@@ -14,10 +14,11 @@ export const productRepository = () => {
         await dynamoClient.putItem(params)
     }
 
-    const findProductsByCategory = async (categoryId: string) => {
+    const findProductsByCategory = async (categoryId: string,limit:number,skip:number) => {
         const productParams = {
             TableName: Tables.product,
             IndexName: 'CategoryIdIndex',
+            Limit: limit,
             KeyConditionExpression: 'categoryId = :categoryId',
             ExpressionAttributeValues: {
                 ':categoryId': { S: categoryId },

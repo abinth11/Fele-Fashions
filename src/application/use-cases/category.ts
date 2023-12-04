@@ -28,7 +28,7 @@ export const addCategoryUseCase = async (
     }
     const newCategory = new Category(category)
     await repository.addCategory(newCategory)
-    await cacheRepository.clearCache(CacheKeys.ALL_CATEGORIES)
+    await cacheRepository.clearAllPreviousCache(CacheKeys.ALL_CATEGORIES)
 }
 
 /**
@@ -51,7 +51,7 @@ export const findAllCategoriesUseCase = async (
     }
     const categories = await repository.findAll(limit, skip)
     const cacheOptions = {
-        key: CacheKeys.ALL_CATEGORIES,
+        key: `${CacheKeys.ALL_CATEGORIES}:${limit}:${skip}`,
         data: JSON.stringify(categories),
         expireTimeSec: 86400
     }

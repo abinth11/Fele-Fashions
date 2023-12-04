@@ -5,7 +5,7 @@ export const productRepoInterface = (repository:ReturnType<ProductRepository>)=>
 
     const addProduct = (product:Product)=> repository.addProduct(product)
 
-    const findProductsByCategory = (categoryId:string) => repository.findProductsByCategory(categoryId)
+    const findProductsByCategory = (categoryId:string,limit:number,skip:number) => repository.findProductsByCategory(categoryId,limit,skip)
 
     return {
         addProduct,
