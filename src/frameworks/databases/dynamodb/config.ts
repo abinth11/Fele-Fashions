@@ -8,8 +8,6 @@ const config = {
     // @ts-ignore
     endpoint:ENV_CONFIG.AWS_END_POINT ,
 }
-// export const dynamoDB = new AWS.DynamoDB();
-// const dynamoClient = new AWS.DynamoDB.DocumentClient();
 const dynamoClient = new DynamoDB(config);
 
 export default dynamoClient;
